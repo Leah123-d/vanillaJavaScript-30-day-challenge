@@ -60,6 +60,36 @@
 
 <script>
 
+  function playSound(e){
+  //query selector is being used here to select specific keyCodes
+  //this function is listening for an event 'keydown', this will match to the data-key corresponding to the data-keys above
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+  //selecting the class key to add animation to them
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+  if(!audio) return; //stops the function from running all together
+  audio.currentTime = 0; //will rewind the audio to the start to allow multiple plays
+  audio.play() //play() is an HTMLMediaElement method attempts to be begin playback of the media. It returns a promise, which resolves when playback has successfully started
+  //we are adding the class to the key to add the animation only when clicked
+  key.classList.add('playing')
+  }
+
+  function removeTransition(e){
+    if (e.propertyName !== 'transform') return; //skip the event if it is not a transform
+    //console.log(this) //this refers to what got called against it. AddEventListener got called, and key was called against it. Referring to the forEach loop below
+    this.classList.remove('playing')
+  }
+  
+  //transition end event, will allow the animation to disappear
+  const keys = document.querySelectorAll('.key');
+  //each key gets an event listener added to it which is transitionend when it ends it is removed
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  window.addEventListener('keydown', playSound );
+
+//Lesson take aways: 
+//key events 
+//playing audio
+//listening transitionend event 
+//can also listen for animation end event
 </script>
 
 
